@@ -8,10 +8,10 @@
 ##                                                                                      ## 
 ##########################################################################################
 
-# set AVP start value
+# set AVP start value for "for loop"
 sessionIDStartValue=1114320
 
-#set AVP end value
+#set AVP end value for "for loop"
 sessionIDEndValue=1114326
 
 # set to yes to run test without AVP 44 set
