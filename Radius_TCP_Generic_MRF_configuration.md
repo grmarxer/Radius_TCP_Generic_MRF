@@ -21,7 +21,7 @@
 3. Create the Generic MRF Configuration -- Generic MRF can only be configured in TMSH
     ```
     tmsh create ltm message-routing generic protocol radiusTcp no-response yes disable-parser yes
-    tmsh create ltm message-routing generic transport-config toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp f5-tcp-progressive } source-address-translation { type automap } rules { radius-gm-mrf }
+    tmsh create ltm message-routing generic transport-config toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp f5-tcp-progressive } source-address-translation { type automap } rules { Radius_TCP_Generic_MRF_iRule }
     tmsh create ltm message-routing generic peer peer-radiusServer-cluster01 auto-initialization disabled connection-mode per-client pool radius_tcp_server_pool transport-config toward-radiusServer-cluster01
     tmsh create ltm message-routing generic route route-radiusServer-cluster01 peers { peer-radiusServer-cluster01 }
     tmsh create ltm message-routing generic router router-toward-radiusServer-cluster01 routes replace-all-with { route-radiusServer-cluster01 }
