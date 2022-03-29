@@ -2,6 +2,7 @@
 
 - BIG-IP version 15.1.3.1
 - Persist on AVP Type 44 (Acct-Session-ID)
+- Pass through if AVP Type 44 (Acct-Session-ID) is not present
 
 ### Steps
 
