@@ -1,7 +1,7 @@
 #!/bin/bash
 ##########################################################################################
 ##                                                                                      ##
-## Script to test BIG-IP Radius TCP Generic MRF                                         ##
+## Script to test BIG-IP Radius TCP Generic MRF using FreeRadius Server                 ##
 ##                                                                                      ##
 ## Created by Gregg Marxer (g.marxer@f5.com)                                            ##
 ## Date: 08262021 Revision 1                                                            ##
