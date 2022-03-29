@@ -7,7 +7,9 @@
 
     - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_TCP_Generic_MRF_iRule.tcl) to create the `Radius_TCP_Generic_MRF_iRule`.
 
-2.  Create the Nodes and Pool for the Radius Servers
+2.  Create the Nodes and Pool for the Radius Servers  
+    - Adjust the number of nodes according to your specific configuration, the IP addresses and port numbers
+    
     ```
     tmsh create ltm node radius_server_1 address 172.16.10.10
     tmsh create ltm node radius_server_2 address 172.16.10.15
@@ -22,6 +24,8 @@
     tmsh create ltm message-routing generic router router-toward-radiusServer-cluster01 routes replace-all-with { route-radiusServer-cluster01 }
     ```  
 4.  Create the LTM Virtual Server Listener for the Radius TCP Traffic
+    - Adjust the Virtual Server IP address specific to your configuration
+
     ``` 
     tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:1812 rules { Radius_TCP_Generic_MRF_iRule }
     ```  
