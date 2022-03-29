@@ -8,6 +8,9 @@
 ##                                                                                      ## 
 ##########################################################################################
 
+# IP address of BIG-IP VIP
+VIP="172.16.5.25"
+
 # set AVP start value for "for loop"
 sessionIDStartValue=1114320
 
@@ -16,13 +19,14 @@ sessionIDEndValue=1114326
 
 # set to yes to run test without AVP 44 set
 null=no
+#null=yes
 
 function echoCommandType44 {
-   echo "User-Name=bob,User-Password=hello,Acct-Session-ID=$sessionID,Dialback-No=1234567,Dialback-Name=michael,Old-Password=old,Port-Message=listen,Framed-Filter-Id=xyz" | radclient -P tcp 172.16.5.25 auth default -x -r 1
+   echo "User-Name=bob,User-Password=hello,Acct-Session-ID=$sessionID,Dialback-No=1234567,Dialback-Name=michael,Old-Password=old,Port-Message=listen,Framed-Filter-Id=xyz" | radclient -P tcp $VIP auth default -x -r 1
 }
 
 function echoCommandTypeNull {
-   echo "User-Name=bob,User-Password=hello,Dialback-No=1234567,Dialback-Name=michael,Old-Password=old,Port-Message=listen,Framed-Filter-Id=xyz" | radclient -P tcp 172.16.5.25 auth default -x -r 1
+   echo "User-Name=bob,User-Password=hello,Dialback-No=1234567,Dialback-Name=michael,Old-Password=old,Port-Message=listen,Framed-Filter-Id=xyz" | radclient -P tcp $VIP auth default -x -r 1
 }
 
 
