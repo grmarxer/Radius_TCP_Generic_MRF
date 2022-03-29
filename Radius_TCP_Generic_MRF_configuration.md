@@ -4,7 +4,9 @@
 - Persist on AVP Type 44 (Acct-Session-ID)
 - Pass through if AVP Type 44 (Acct-Session-ID) is not present
 
-### Steps
+<br/>  
+
+### BIG-IP Configuration Steps
 
 
 1. Create the following iRule `Radius_TCP_Generic_MRF_iRule` on BIG-IP using the GUI -- Local Traffic > iRules > Create  
