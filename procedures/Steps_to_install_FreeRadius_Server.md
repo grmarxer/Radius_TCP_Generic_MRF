@@ -1,6 +1,10 @@
-## Steps to Install and Configure FreeRadius Sever on Centos 8
+## Steps to Install and Configure FreeRadius Sever on Centos 8  
 
-- https://www.cyberithub.com/install-setup-freeradius-server-in-linux/
+<br/>  
+
+- https://www.cyberithub.com/install-setup-freeradius-server-in-linux/  
+
+<br/>  
 
 1. yum install freeradius freeradius-utils freeradius-mysql freeradius-perl –y  
 
