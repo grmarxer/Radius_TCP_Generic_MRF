@@ -1,6 +1,6 @@
 #============================================================================================================================#
 # Purpose  : Radius TCP Generic MRF iRule persisting on AVP Type 44
-# Author   : Gregg Marxer (g.marxer@f5.com)
+# Author   : Gregg Marxer (g.marxer@f5.com), Vernon Wells (v.wells@f5.com)
 # Date     : March 25, 2022
 # Version  : 0.0.1
 #
