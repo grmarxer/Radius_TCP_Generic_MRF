@@ -1,4 +1,4 @@
-## Steps to Install, Configure, and Test FreeRadius Sever on Centos 8  
+## Steps to Install, Configure, and Test FreeRadius Sever (TCP) on Centos 8  
 
 <br/>  
 
