@@ -146,7 +146,6 @@ when MR_EGRESS {
         MR::restore client_return_flow egress_persistence_key
         if { $egress_persistence_key ne "" } {
           #log local0. "received persistence key in mr egress = $egress_persistence_key"
-          # Will this get thrown off using the / if the customer is using partitions?
           table set $egress_persistence_key "[string range [MR::transport] [string first / [MR::transport]] end];[IP::remote_addr]%[ROUTE::domain]:[TCP::remote_port]" $static::radius_rule_persistence_entry_timeout indef
         }
     }
