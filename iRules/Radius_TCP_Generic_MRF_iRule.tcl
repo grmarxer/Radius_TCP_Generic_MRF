@@ -120,7 +120,7 @@ when MR_INGRESS {
                 #log local0. "HIT MR ingress set existing_persist_dst_for_this_session_id -- if"
                 MR::message nexthop none
                 #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
-				#log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
+                #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
                 MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] host [getfield $existing_persist_dst_for_this_session_id ";" 2]
             } else {
                  #log local0. "setting persistence key in mr ingress else"
