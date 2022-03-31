@@ -19,7 +19,7 @@ when CLIENT_ACCEPTED {
     #log local0. "HIT client_accepted"
     # this is required to make mr-generic work as you expect
     GENERICMESSAGE::peer name "[IP::client_addr]:[TCP::client_port]"
-    # this is necessary if multiple PDU's come accross as part of the TCP stream.  
+    # This is necessary if multiple PDU's come accross as part of the TCP stream.  
     # Setting the value to -1 an impossilbe value will prevent the while loop from kicking off prematurely
     set next_radius_pdu_length -1
     TCP::collect
@@ -36,6 +36,7 @@ when SERVER_CONNECTED {
 
 when CLIENT_DATA {
     #log local0. "HIT client_data"
+	# This "while loop" will ensure the we capture the entire radius message, even if it is across multiple TCP messages. 
     while { [TCP::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
             binary scan [TCP::payload] xxS next_radius_pdu_length
@@ -47,7 +48,7 @@ when CLIENT_DATA {
             TCP::collect
             return
         }
- 
+        # Once the entire Radius message is collected it will be sent out as a Generic Message to Generic Message Ingress
         GENERICMESSAGE::message create [TCP::payload $next_radius_pdu_length]
         
         TCP::release $next_radius_pdu_length
@@ -83,15 +84,19 @@ when GENERICMESSAGE_INGRESS {
     #log local0. "HIT gerneric-message_ingress"
     if { [clientside] } {
         set acct_session_id_for_this_msg ""
+		# The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
         set starting_point_of_next_avp 20
+		# This "while loop" performs a binary scan of the data identifying each AVP type, looking for AVP Type 44  -- Acct-Session-Id
         while { $starting_point_of_next_avp < [GENERICMESSAGE::message length] } {
             binary scan [GENERICMESSAGE::message data] x${starting_point_of_next_avp}cc avp_type avp_length
             set avp_length [expr { $avp_length & 0xff }]
             #log local0.  "generic message incress AVP Type = $avp_type"
             #log local0.  "generic message incress AVP length = $avp_length"
             if { $avp_type == 44 } {
+			    # This will set the length of AVP 44, minus the CODE and PACKET IDENTIFIER bytes
                 set acct_session_id_data_length [expr { ($avp_length - 2) & 0xff }]
                 #log local0. "acct_session_id_data_length = $acct_session_id_data_length"
+				# This will collect the value of AVP TYPE 44 that will be used for persistence
                 binary scan [GENERICMESSAGE::message data] x[expr { $starting_point_of_next_avp + 2 }]a${acct_session_id_data_length} acct_session_id_for_this_msg
                 #log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
                 return
@@ -108,7 +113,7 @@ when MR_INGRESS {
         set client_return_flow [MR::message lasthop]
         set egress_persistence_key ""
         #log local0. " client_return_flow = [MR::message lasthop] "
- 
+        # This will determine if this AVP Type 44 value has been already been set as a persistence entry and route accordingly, or set the persistence entry
         if { $acct_session_id_for_this_msg ne "" } {
             #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
             if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
