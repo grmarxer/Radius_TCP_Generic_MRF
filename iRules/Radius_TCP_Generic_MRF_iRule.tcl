@@ -84,19 +84,19 @@ when GENERICMESSAGE_INGRESS {
     #log local0. "HIT gerneric-message_ingress"
     if { [clientside] } {
         set acct_session_id_for_this_msg ""
-		# The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
+        # The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
         set starting_point_of_next_avp 20
-		# This "while loop" performs a binary scan of the data identifying each AVP type, looking for AVP Type 44  -- Acct-Session-Id
+        # This "while loop" performs a binary scan of the data identifying each AVP type, looking for AVP Type 44  -- Acct-Session-Id
         while { $starting_point_of_next_avp < [GENERICMESSAGE::message length] } {
             binary scan [GENERICMESSAGE::message data] x${starting_point_of_next_avp}cc avp_type avp_length
             set avp_length [expr { $avp_length & 0xff }]
             #log local0.  "generic message incress AVP Type = $avp_type"
             #log local0.  "generic message incress AVP length = $avp_length"
             if { $avp_type == 44 } {
-			    # This will set the length of AVP 44, minus the CODE and PACKET IDENTIFIER bytes
+                # This will set the length of AVP 44, minus the CODE and PACKET IDENTIFIER bytes
                 set acct_session_id_data_length [expr { ($avp_length - 2) & 0xff }]
                 #log local0. "acct_session_id_data_length = $acct_session_id_data_length"
-				# This will collect the value of AVP TYPE 44 that will be used for persistence
+                # This will collect the value of AVP TYPE 44 that will be used for persistence
                 binary scan [GENERICMESSAGE::message data] x[expr { $starting_point_of_next_avp + 2 }]a${acct_session_id_data_length} acct_session_id_for_this_msg
                 #log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
                 return
