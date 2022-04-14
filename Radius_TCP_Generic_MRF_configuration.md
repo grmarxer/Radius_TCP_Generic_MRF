@@ -1,6 +1,6 @@
 ## Steps to Configure Radius TCP Load Balancing using Generic MRF  
 
-- BIG-IP version 15.1.3.1
+- BIG-IP version 15.1.3.1, 13.1.3.4
 - Persist on AVP Type 44 (Acct-Session-ID)
 - Pass through if AVP Type 44 (Acct-Session-ID) is not present  
 - GENERIC MRF Configuration CLI only  
