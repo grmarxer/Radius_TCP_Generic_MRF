@@ -20,7 +20,7 @@
     ```
     tmsh create ltm node radius_server_1 address 172.16.10.10
     tmsh create ltm node radius_server_2 address 172.16.10.15
-    tmsh create ltm pool radius_tcp_server_pool monitor gateway_icmp members add { radius_server_1:1812 radius_server_2:1812 }
+    tmsh create ltm pool radius_tcp_server_pool monitor gateway_icmp members add { radius_server_1:2083 radius_server_2:2083 }
     tmsh save sys config
     ```
 3. Create the Generic MRF Configuration -- Generic MRF can only be configured in TMSH
@@ -36,6 +36,6 @@
     - Adjust the Virtual Server IP address and port specific to your configuration
 
     ``` 
-    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:1812 rules { Radius_TCP_Generic_MRF_iRule }
+    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:2083 rules { Radius_TCP_Generic_MRF_iRule }
     tmsh save sys config
     ```  
