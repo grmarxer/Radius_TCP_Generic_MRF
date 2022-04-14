@@ -12,7 +12,7 @@ when RULE_INIT {
     #log local0. "HIT rule_init"
     # timeout for persistence entries in second
     # F5 Consulting verify what customer wants for the persistence timeout
-    set static::radius_rule_persistence_entry_timeout 20
+    set static::radius_rule_persistence_entry_timeout 60
 }
 
 when CLIENT_ACCEPTED {
