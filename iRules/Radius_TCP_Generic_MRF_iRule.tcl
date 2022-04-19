@@ -81,7 +81,7 @@ when SERVER_DATA {
 }
  
 when GENERICMESSAGE_INGRESS {
-    #log local0. "HIT gerneric-message_ingress"
+    log local0. "HIT gerneric-message_ingress"
     if { [clientside] } {
         set acct_session_id_for_this_msg ""
         # The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
@@ -90,7 +90,7 @@ when GENERICMESSAGE_INGRESS {
         while { $starting_point_of_next_avp < [GENERICMESSAGE::message length] } {
             binary scan [GENERICMESSAGE::message data] x${starting_point_of_next_avp}cc avp_type avp_length
             set avp_length [expr { $avp_length & 0xff }]
-            #log local0.  "generic message incress AVP Type = $avp_type"
+            log local0.  "generic message incress AVP Type = $avp_type"
             #log local0.  "generic message incress AVP length = $avp_length"
             if { $avp_type == 44 } {
                 # This will set the length of AVP 44, minus the CODE and PACKET IDENTIFIER bytes
@@ -108,7 +108,7 @@ when GENERICMESSAGE_INGRESS {
 }
 
 when MR_INGRESS {
-    #log local0. "HIT MR_ingress"
+    log local0. "HIT MR_ingress"
     if { [clientside] } {
         set client_return_flow [MR::message lasthop]
         set egress_persistence_key ""
@@ -117,7 +117,7 @@ when MR_INGRESS {
         if { $acct_session_id_for_this_msg ne "" } {
             #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
             if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
-                #log local0. "HIT MR ingress set existing_persist_dst_for_this_session_id -- if"
+                log local0. "existing_persist_dst_for_this_session_id = ($existing_persist_dst_for_this_session_id)"
                 MR::message nexthop none
                 #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
                 #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
@@ -125,6 +125,7 @@ when MR_INGRESS {
             } else {
                  #log local0. "setting persistence key in mr ingress else"
                  set egress_persistence_key "asi-$acct_session_id_for_this_msg"
+				 log local0. "egress_persistence_key = ($egress_persistence_key)"
             }
         }
         #log local0. "value of the egress_persistence_key = $egress_persistence_key"
