@@ -125,7 +125,7 @@ when MR_INGRESS {
             } else {
                  #log local0. "setting persistence key in mr ingress else"
                  set egress_persistence_key "asi-$acct_session_id_for_this_msg"
-				 log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key)"
+                 log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key)"
             }
         }
         #log local0. "value of the egress_persistence_key = $egress_persistence_key"
