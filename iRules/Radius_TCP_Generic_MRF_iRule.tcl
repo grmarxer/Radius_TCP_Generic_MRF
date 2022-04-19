@@ -117,7 +117,7 @@ when MR_INGRESS {
         if { $acct_session_id_for_this_msg ne "" } {
             #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
             if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
-                log local0. "existing_persist_dst_for_this_session_id = ($existing_persist_dst_for_this_session_id)"
+                log local0. "(existing_persist_dst_for_this_session_id) is for  = ($existing_persist_dst_for_this_session_id)"
                 MR::message nexthop none
                 #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
                 #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
@@ -125,7 +125,7 @@ when MR_INGRESS {
             } else {
                  #log local0. "setting persistence key in mr ingress else"
                  set egress_persistence_key "asi-$acct_session_id_for_this_msg"
-				 log local0. "egress_persistence_key = ($egress_persistence_key)"
+				 log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key)"
             }
         }
         #log local0. "value of the egress_persistence_key = $egress_persistence_key"
