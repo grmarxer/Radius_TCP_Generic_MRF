@@ -37,6 +37,6 @@
     - Adjust the Virtual Server IP address and port specific to your configuration
 
     ``` 
-    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:2083 rules { Radius_SSL_Generic_MRF_iRule } disabled
+    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:2083 rules { Radius_SSL_Generic_MRF_iRule }
     tmsh save sys config
     ```  
