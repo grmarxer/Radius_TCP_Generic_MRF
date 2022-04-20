@@ -103,7 +103,7 @@ when GENERICMESSAGE_INGRESS {
                 #log local0. "acct_session_id_data_length = $acct_session_id_data_length"
                 # This will collect the value of AVP TYPE 44 that will be used for persistence
                 binary scan [GENERICMESSAGE::message data] x[expr { $starting_point_of_next_avp + 2 }]a${acct_session_id_data_length} acct_session_id_for_this_msg
-                #log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
+                log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
                 return
             }
  
