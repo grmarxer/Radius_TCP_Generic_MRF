@@ -133,7 +133,6 @@ when MR_INGRESS {
                  log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key)"
             }
         }
-        #log local0. "value of the egress_persistence_key = $egress_persistence_key"
         MR::store client_return_flow egress_persistence_key
     } else {
         if { $client_return_flow ne "" } {
