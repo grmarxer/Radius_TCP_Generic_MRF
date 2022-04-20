@@ -160,12 +160,12 @@ when MR_EGRESS {
 when GENERICMESSAGE_EGRESS {
 
     if { [clientside] } {
-      #log local0. "HIT generic-message_egress"
-	  SSL::respond [GENERICMESSAGE::message data]
-	}
-	else {
-	  TCP::respond [GENERICMESSAGE::message data]
-	}
+     #log local0. "HIT generic-message_egress"
+     SSL::respond [GENERICMESSAGE::message data]
+    }
+    else {
+      TCP::respond [GENERICMESSAGE::message data]
+    }
 }
 
 
