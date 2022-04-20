@@ -30,7 +30,7 @@ when CLIENTSSL_HANDSHAKE {
 }
 
 when SERVER_CONNECTED {
-    #log local0. "HIT server_connected"
+    log local0. "HIT server_connected"
     set next_local_radius_identifier 1
     GENERICMESSAGE::peer name "[IP::server_addr]:[TCP::server_port]"
     
@@ -63,7 +63,7 @@ when CLIENTSSL_DATA {
 }
 
 when SERVER_DATA {
-    #log local0. "HIT server_data"
+    log local0. "HIT server_data"
     while { [TCP::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
             binary scan [TCP::payload] xxS next_radius_pdu_length
@@ -147,7 +147,7 @@ when MR_INGRESS {
 }
 
 when MR_EGRESS {
-    #log local0. " HIT MR_egress"
+    log local0. " HIT MR_egress"
     if { [serverside] } {
         MR::restore client_return_flow egress_persistence_key
         if { $egress_persistence_key ne "" } {
@@ -158,9 +158,9 @@ when MR_EGRESS {
 }
 
 when GENERICMESSAGE_EGRESS {
+    log local0. "HIT generic-message_egress"
     if { [clientside] } {
-     #log local0. "HIT generic-message_egress"
-     SSL::respond [GENERICMESSAGE::message data]
+      SSL::respond [GENERICMESSAGE::message data]
     }
     else {
       TCP::respond [GENERICMESSAGE::message data]
@@ -169,7 +169,7 @@ when GENERICMESSAGE_EGRESS {
 
 
 when MR_FAILED {
-    #log local0. "HIT mr_failed"
+    log local0. "HIT mr_failed"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         #log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
