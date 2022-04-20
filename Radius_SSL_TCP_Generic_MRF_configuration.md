@@ -4,7 +4,7 @@
 - Persist on AVP Type 44 (Acct-Session-ID)
 - Pass through if AVP Type 44 (Acct-Session-ID) is not present  
 - GENERIC MRF Configuration CLI only  
-- Client side SSL Offload
+- Client Side SSL Offload
 
 <br/>  
 
