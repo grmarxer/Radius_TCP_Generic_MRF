@@ -1,4 +1,4 @@
-## Steps to Configure Radius TCP Load Balancing with SSL Offload using Generic MRF  
+## Steps to Configure Radius (RADSEC) TCP Load Balancing with SSL Offload using Generic MRF  
 
 - BIG-IP version 15.1.3.1, 13.1.3.4
 - Persist on AVP Type 44 (Acct-Session-ID)
