@@ -45,7 +45,7 @@ when CLIENTSSL_DATA {
         if { $next_radius_pdu_length < 0 } {
             binary scan [SSL::payload] xxS next_radius_pdu_length
             set next_radius_pdu_length [expr { $next_radius_pdu_length & 0xffff }]
-            #log local0. "next_radius_pdu_length in client data = $next_radius_pdu_length"
+            log local0. "next_radius_pdu_length in client data = $next_radius_pdu_length"
         }
      
         if { [SSL::payload length] < $next_radius_pdu_length } {
