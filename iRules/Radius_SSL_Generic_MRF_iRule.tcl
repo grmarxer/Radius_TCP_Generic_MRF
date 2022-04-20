@@ -93,7 +93,7 @@ when GENERICMESSAGE_INGRESS {
         # The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
         set starting_point_of_next_avp 20
         # This "while loop" performs a binary scan of the data identifying each AVP type, looking for AVP Type 44  -- Acct-Session-Id
-		# PS add safety measure to prevent infintite loop
+        # PS add safety measure to prevent infintite loop
         while { $starting_point_of_next_avp < [GENERICMESSAGE::message length] } {
             binary scan [GENERICMESSAGE::message data] x${starting_point_of_next_avp}cc avp_type avp_length
             set avp_length [expr { $avp_length & 0xff }]
