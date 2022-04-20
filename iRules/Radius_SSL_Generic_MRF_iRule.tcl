@@ -41,6 +41,7 @@ when SERVER_CONNECTED {
 when CLIENTSSL_DATA {
     log local0. "HIT CLIENTSSL-DATA"
     # This "while loop" will ensure the we capture the entire radius message, even if it is across multiple TCP messages. 
+    # PS add safety measure to prevent infintite loop
     while { [SSL::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
             binary scan [SSL::payload] xxS next_radius_pdu_length
@@ -64,6 +65,7 @@ when CLIENTSSL_DATA {
 
 when SERVER_DATA {
     log local0. "HIT server_data"
+    # PS add safety measure to prevent infintite loop
     while { [TCP::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
             binary scan [TCP::payload] xxS next_radius_pdu_length
