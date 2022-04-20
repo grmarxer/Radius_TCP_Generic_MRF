@@ -1,16 +1,17 @@
-## Steps to Configure Radius TCP Load Balancing using Generic MRF  
+## Steps to Configure Radius TCP Load Balancing with SSL Offload using Generic MRF  
 
 - BIG-IP version 15.1.3.1, 13.1.3.4
 - Persist on AVP Type 44 (Acct-Session-ID)
 - Pass through if AVP Type 44 (Acct-Session-ID) is not present  
 - GENERIC MRF Configuration CLI only  
+- Client side SSL Offload
 
 <br/>  
 
 ### BIG-IP Configuration Steps
 
 
-1. Create the following iRule `Radius_TCP_Generic_MRF_iRule` on BIG-IP using the GUI -- Local Traffic > iRules > Create  
+1. Create the following iRule `Radius_SSL_Generic_MRF_iRule` on BIG-IP using the GUI -- Local Traffic > iRules > Create  
 
     - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_SSL_Generic_MRF_iRule.tcl) to create the `Radius_SSL_Generic_MRF_iRule`.
 
