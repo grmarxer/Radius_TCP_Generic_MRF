@@ -1,5 +1,5 @@
 #============================================================================================================================#
-# Purpose  : Radius SSL/TCP Generic MRF iRule persisting on AVP Type 44
+# Purpose  : Radius SSL/TCP Generic MRF iRule persisting on AVP Type 44 (Server-Side MRF Transport Config iRule)
 # Author   : Gregg Marxer (g.marxer@f5.com), Vernon Wells (v.wells@f5.com)
 # Date     : April 20, 2022
 # Version  : 0.0.1
