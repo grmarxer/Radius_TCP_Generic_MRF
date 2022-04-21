@@ -45,8 +45,6 @@ when CLIENTSSL_DATA {
  
     SSL::collect
 }
-
-
  
 when GENERICMESSAGE_INGRESS {
     log local0. "HIT gerneric-message_ingress-clientside"
@@ -97,13 +95,10 @@ when MR_INGRESS {
     MR::store client_return_flow egress_persistence_key
 }
 
-
-
 when GENERICMESSAGE_EGRESS {
     log local0. "HIT generic-message_egress-clientside"
     SSL::respond [GENERICMESSAGE::message data]
 }
-
 
 when MR_FAILED {
     log local0. "HIT mr_failed-clientside"

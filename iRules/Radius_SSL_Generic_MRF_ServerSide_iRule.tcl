@@ -72,7 +72,6 @@ when GENERICMESSAGE_EGRESS {
     TCP::respond [GENERICMESSAGE::message data]
 }
 
-
 when MR_FAILED {
     log local0. "HIT mr_failed-serverside"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
