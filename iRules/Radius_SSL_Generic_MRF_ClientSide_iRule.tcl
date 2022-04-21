@@ -106,7 +106,7 @@ when GENERICMESSAGE_EGRESS {
 
 
 when MR_FAILED {
-    log local0. "HIT mr_failed"
+    log local0. "HIT mr_failed-clientside"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         #log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
