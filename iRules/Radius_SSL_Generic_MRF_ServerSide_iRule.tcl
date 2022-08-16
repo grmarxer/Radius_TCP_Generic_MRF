@@ -9,14 +9,14 @@
 
 
 when RULE_INIT {
-    log local0. "HIT rule_init"
+    #log local0. "HIT rule_init"
     # timeout for persistence entries in second
     # F5 Consulting verify what customer wants for the persistence timeout
     set static::radius_rule_persistence_entry_timeout 60
 }
 
 when SERVER_CONNECTED {
-    log local0. "HIT server_connected"
+    #log local0. "HIT server_connected"
     set next_local_radius_identifier 1
     GENERICMESSAGE::peer name "[IP::server_addr]:[TCP::server_port]"
     
@@ -25,7 +25,7 @@ when SERVER_CONNECTED {
 }
 
 when SERVER_DATA {
-    log local0. "HIT server_data"
+    #log local0. "HIT server_data"
     # PS add safety measure to prevent infintite loop
     while { [TCP::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
@@ -48,7 +48,7 @@ when SERVER_DATA {
 }
 
 when MR_INGRESS {
-    log local0. "HIT MR_ingress-serverside"
+    #log local0. "HIT MR_ingress-serverside"
     if { $client_return_flow ne "" } {
         MR::message nexthop $client_return_flow
     } else {
@@ -59,25 +59,25 @@ when MR_INGRESS {
 }
 
 when MR_EGRESS {
-    log local0. " HIT MR_egress-serverside"
+    #log local0. " HIT MR_egress-serverside"
     MR::restore client_return_flow egress_persistence_key
     if { $egress_persistence_key ne "" } {
-      #log local0. "received persistence key in mr egress = $egress_persistence_key"
+      log local0. "received persistence key in mr egress = $egress_persistence_key"
       table set $egress_persistence_key "[string range [MR::transport] [string first / [MR::transport]] end];[IP::remote_addr]%[ROUTE::domain]:[TCP::remote_port]" $static::radius_rule_persistence_entry_timeout indef
     }
 }
 
 when GENERICMESSAGE_EGRESS {
-    log local0. " HIT GENERICMESSAGE_EGRESS-serverside"
+    #log local0. " HIT GENERICMESSAGE_EGRESS-serverside"
     TCP::respond [GENERICMESSAGE::message data]
 }
 
 when MR_FAILED {
-    log local0. "HIT mr_failed-serverside"
+    #log local0. "HIT mr_failed-serverside"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
-        #log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
-        MR::message nexthop none
+        log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
+        #MR::message nexthop none
         MR::retry
     } else {
         MR::message drop
