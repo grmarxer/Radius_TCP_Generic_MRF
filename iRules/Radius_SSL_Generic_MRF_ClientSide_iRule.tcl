@@ -81,7 +81,7 @@ when MR_INGRESS {
     if { $acct_session_id_for_this_msg ne "" } {
         #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
         if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
-            #log local0. "(existing_persist_dst_for_this_session_id) is for  = ($existing_persist_dst_for_this_session_id)"
+            log local0. "(existing_persist_dst_for_this_session_id) is for  = ($existing_persist_dst_for_this_session_id)"
             MR::message nexthop none
             log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
             log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
