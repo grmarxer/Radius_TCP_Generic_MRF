@@ -83,8 +83,8 @@ when MR_INGRESS {
         if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
             log local0. "(existing_persist_dst_for_this_session_id) is = ($existing_persist_dst_for_this_session_id) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
             MR::message nexthop none
-            log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
-            log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
+            #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
+            #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
             MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] host [getfield $existing_persist_dst_for_this_session_id ";" 2]
         } else {
             set egress_persistence_key "asi-$acct_session_id_for_this_msg"
