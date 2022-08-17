@@ -47,7 +47,7 @@ when CLIENTSSL_DATA {
 }
  
 when GENERICMESSAGE_INGRESS {
-    #log local0. "HIT gerneric-message_ingress-clientside"
+    #log local0. "#### Starting GENERICMESSAGE_INGRESS ####"
     set acct_session_id_for_this_msg ""
     # The TCP header is 20 bytes and must be accounted for when parsing the Radius AVP's
     set starting_point_of_next_avp 20
@@ -56,15 +56,15 @@ when GENERICMESSAGE_INGRESS {
     while { $starting_point_of_next_avp < [GENERICMESSAGE::message length] } {
         binary scan [GENERICMESSAGE::message data] x${starting_point_of_next_avp}cc avp_type avp_length
         set avp_length [expr { $avp_length & 0xff }]
-        #log local0.  "generic message incress AVP Type = $avp_type"
-        #log local0.  "generic message incress AVP length = $avp_length"
+        #log local0.  "generic message ingress AVP Type = $avp_type"
+        #log local0.  "generic message ingress AVP length = $avp_length"
         if { $avp_type == 44 } {
             # This will set the length of AVP 44, minus the CODE and PACKET IDENTIFIER bytes
             set acct_session_id_data_length [expr { ($avp_length - 2) & 0xff }]
             #log local0. "acct_session_id_data_length = $acct_session_id_data_length"
             # This will collect the value of AVP TYPE 44 that will be used for persistence
             binary scan [GENERICMESSAGE::message data] x[expr { $starting_point_of_next_avp + 2 }]a${acct_session_id_data_length} acct_session_id_for_this_msg
-            log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
+            #log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
             return
         }
  
@@ -73,7 +73,7 @@ when GENERICMESSAGE_INGRESS {
 }
 
 when MR_INGRESS {
-    log local0. "####  Starting MR_INGRESS  ####"
+    log local0. "####  Starting MR_INGRESS CLIENTSIDE ####"
     set client_return_flow [MR::message lasthop]
     set egress_persistence_key ""
     #log local0. " client_return_flow = [MR::message lasthop] "
@@ -81,15 +81,14 @@ when MR_INGRESS {
     if { $acct_session_id_for_this_msg ne "" } {
         #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
         if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
-            log local0. "(existing_persist_dst_for_this_session_id) is for  = ($existing_persist_dst_for_this_session_id)"
+            log local0. "(existing_persist_dst_for_this_session_id) is = ($existing_persist_dst_for_this_session_id) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
             MR::message nexthop none
             log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
             log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
             MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] host [getfield $existing_persist_dst_for_this_session_id ";" 2]
         } else {
-            #log local0. "setting persistence key in mr ingress else"
             set egress_persistence_key "asi-$acct_session_id_for_this_msg"
-            log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key)"
+            log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
         }
     }
     MR::store client_return_flow egress_persistence_key
@@ -101,7 +100,7 @@ when GENERICMESSAGE_EGRESS {
 }
 
 when MR_FAILED {
-    log local0. "**** Entering MR_FAILED clientside ****"
+    log local0. "**** Entering MR_FAILED CLIENTSIDE ****"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
