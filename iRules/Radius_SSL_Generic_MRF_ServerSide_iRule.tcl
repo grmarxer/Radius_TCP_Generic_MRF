@@ -60,6 +60,14 @@ when MR_INGRESS {
 
 when MR_EGRESS {
     #log local0. " HIT MR_egress-serverside"
+    log local0. "Number of connection instance [MR::connection_instance]"
+    log local0. "out [MR::message nexthop]"
+    log local0. "out [MR::message status]"
+    log local0. "out [MR::message route]"
+    log local0. "out [MR::connection_instance]"
+    log local0. "out [MR::transport]"
+    log local0. "out [MR::message attempted]"
+    log local0. "out  [IP::remote_addr]"
     MR::restore client_return_flow egress_persistence_key
     if { $egress_persistence_key ne "" } {
       log local0. "received persistence key in mr egress = $egress_persistence_key"
@@ -74,6 +82,14 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED SERVERSIDE ****"
+    log local0. "DEBUG: MR_FAILED"
+    log local0. "Failed  [MR::message nexthop]"
+    log local0. "Failed  [MR::message status]"
+    log local0. "Failed  [MR::connection_instance]"
+    log local0. "Failed  [MR::transport]"
+    log local0. "Failed  [MR::message attempted]"
+    log local0. "Failed  [MR::message route]"
+    log local0. "Failed  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
