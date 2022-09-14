@@ -51,6 +51,13 @@ when MR_INGRESS {
     log local0. "####  Starting MR_INGRESS SERVERSIDE ####"
     if { $client_return_flow ne "" } {
         MR::message nexthop $client_return_flow
+        log local0. "nexthop  [MR::message nexthop]"
+        log local0. "status  [MR::message status]"
+        log local0. "connection_instance  [MR::connection_instance]"
+        log local0. "transport  [MR::transport]"
+        log local0. "message attempted  [MR::message attempted]"
+        log local0. "route  [MR::message route]"
+        log local0. "remote_addr [IP::remote_addr]"
     } else {
         log local0.warn "Received RADIUS response from ([IP::remote_addr]:[TCP::remote_port]), but there is no response mapping.  Dropping."
         MR::message drop "Client return flow not defined"
