@@ -101,14 +101,13 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED CLIENTSIDE ****"
-    log local0. "DEBUG: MR_FAILED"
-    log local0. "Failed  [MR::message nexthop]"
-    log local0. "Failed  [MR::message status]"
-    log local0. "Failed  [MR::connection_instance]"
-    log local0. "Failed  [MR::transport]"
-    log local0. "Failed  [MR::message attempted]"
-    log local0. "Failed  [MR::message route]"
-    log local0. "Failed  [IP::remote_addr]"
+    log local0. "mr_failed cs nexthop  [MR::message nexthop]"
+    log local0. "mr_failed cs status  [MR::message status]"
+    log local0. "mr_failed cs connection_instance [MR::connection_instance]"
+    log local0. "mr_failed cs transport  [MR::transport]"
+    log local0. "mr_failed cs message attempted  [MR::message attempted]"
+    log local0. "mr_failed cs route [MR::message route]"
+    log local0. "mr_failed cs remote_addr  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
