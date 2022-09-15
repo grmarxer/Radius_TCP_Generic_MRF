@@ -15,11 +15,12 @@ when CLIENT_ACCEPTED {
 
 when CLIENTSSL_HANDSHAKE {
     #log local0. "HIT CLIENTSSL-HANDSHAKE"
-    # This is necessary if multiple PDU's come accross as part of the TCP stream.  
-    # Setting the value to -1 an impossilbe value will prevent the while loop from kicking off prematurely
+    # if statement add to collect SSL session data to decrypt client side traffic in tcpdump
     if { [IP::addr [getfield [IP::client_addr] "%" 1] equals <client_IP_addr>] } {
       log local0. "[TCP::client_port] :: RSA Session-ID:[SSL::sessionid] Master-Key:[SSL::sessionsecret]"
     }
+    # This is necessary if multiple PDU's come accross as part of the TCP stream.  
+    # Setting the value to -1 an impossilbe value will prevent the while loop from kicking off prematurely
     set next_radius_pdu_length -1
     SSL::collect
 }
