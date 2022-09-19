@@ -16,7 +16,7 @@ when CLIENT_ACCEPTED {
 when CLIENTSSL_HANDSHAKE {
     #log local0. "HIT CLIENTSSL-HANDSHAKE"
     # if statement add to collect SSL session data to decrypt client side traffic in tcpdump
-    if { [IP::addr [getfield [IP::client_addr] "%" 1] equals <client_IP_addr>] } {
+    if { [IP::addr [getfield [IP::client_addr] "%" 1] equals 100.100.100.100] } {
       log local0. "[TCP::client_port] :: RSA Session-ID:[SSL::sessionid] Master-Key:[SSL::sessionsecret]"
     }
     # This is necessary if multiple PDU's come accross as part of the TCP stream.  
@@ -89,7 +89,7 @@ when MR_INGRESS {
             MR::message nexthop none
             #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
             #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
-            MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] host [getfield $existing_persist_dst_for_this_session_id ";" 2]
+            MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] connection-mode per-client host [getfield $existing_persist_dst_for_this_session_id ";" 2]
         } else {
             set egress_persistence_key "asi-$acct_session_id_for_this_msg"
             log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
