@@ -16,9 +16,9 @@ when CLIENT_ACCEPTED {
 when CLIENTSSL_HANDSHAKE {
     #log local0. "HIT CLIENTSSL-HANDSHAKE"
     # if statement add to collect SSL session data to decrypt client side traffic in tcpdump
-    if { [IP::addr [getfield [IP::client_addr] "%" 1] equals 100.100.100.100] } {
-      log local0. "[TCP::client_port] :: RSA Session-ID:[SSL::sessionid] Master-Key:[SSL::sessionsecret]"
-    }
+    #if { [IP::addr [getfield [IP::client_addr] "%" 1] equals 100.100.100.100] } {
+    #  log local0. "[TCP::client_port] :: RSA Session-ID:[SSL::sessionid] Master-Key:[SSL::sessionsecret]"
+    #}
     # This is necessary if multiple PDU's come accross as part of the TCP stream.  
     # Setting the value to -1 an impossilbe value will prevent the while loop from kicking off prematurely
     set next_radius_pdu_length -1
@@ -77,7 +77,7 @@ when GENERICMESSAGE_INGRESS {
 }
 
 when MR_INGRESS {
-    log local0. "####  Starting MR_INGRESS CLIENTSIDE ####"
+    #log local0. "####  Starting MR_INGRESS CLIENTSIDE ####"
     set client_return_flow [MR::message lasthop]
     set egress_persistence_key ""
     #log local0. " client_return_flow = [MR::message lasthop] "
@@ -85,14 +85,14 @@ when MR_INGRESS {
     if { $acct_session_id_for_this_msg ne "" } {
         #log local0. "IN MR ingress accounting session ID for this message = $acct_session_id_for_this_msg"
         if { [set existing_persist_dst_for_this_session_id [table lookup "asi-$acct_session_id_for_this_msg"]] ne "" } {
-            log local0. "(existing_persist_dst_for_this_session_id) is = ($existing_persist_dst_for_this_session_id) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
+            #log local0. "(existing_persist_dst_for_this_session_id) is = ($existing_persist_dst_for_this_session_id) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
             MR::message nexthop none
             #log local0. " value of first getfiled  = ([getfield $existing_persist_dst_for_this_session_id  {;} 1])"
             #log local0. " value of second getfield = ([getfield $existing_persist_dst_for_this_session_id {;} 2])"
             MR::message route config [getfield $existing_persist_dst_for_this_session_id  ";" 1] connection-mode per-client host [getfield $existing_persist_dst_for_this_session_id ";" 2]
         } else {
             set egress_persistence_key "asi-$acct_session_id_for_this_msg"
-            log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
+            #log local0. "(egress_persistence_key) has been set to = ($egress_persistence_key) and the AVP 44 Value = ($acct_session_id_for_this_msg)"
         }
     }
     MR::store client_return_flow egress_persistence_key
@@ -105,13 +105,13 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED CLIENTSIDE ****"
-    log local0. "mr_failed cs nexthop  [MR::message nexthop]"
-    log local0. "mr_failed cs status  [MR::message status]"
-    log local0. "mr_failed cs connection_instance [MR::connection_instance]"
-    log local0. "mr_failed cs transport  [MR::transport]"
-    log local0. "mr_failed cs message attempted  [MR::message attempted]"
-    log local0. "mr_failed cs route [MR::message route]"
-    log local0. "mr_failed cs remote_addr  [IP::remote_addr]"
+    #log local0. "mr_failed cs nexthop  [MR::message nexthop]"
+    #log local0. "mr_failed cs status  [MR::message status]"
+    #log local0. "mr_failed cs connection_instance [MR::connection_instance]"
+    #log local0. "mr_failed cs transport  [MR::transport]"
+    #log local0. "mr_failed cs message attempted  [MR::message attempted]"
+    #log local0. "mr_failed cs route [MR::message route]"
+    #log local0. "mr_failed cs remote_addr  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"

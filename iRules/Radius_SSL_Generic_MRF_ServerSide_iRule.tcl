@@ -48,16 +48,16 @@ when SERVER_DATA {
 }
 
 when MR_INGRESS {
-    log local0. "#### Starting MR_INGRESS SERVERSIDE ####"
+    #log local0. "#### Starting MR_INGRESS SERVERSIDE ####"
     if { $client_return_flow ne "" } {
         MR::message nexthop $client_return_flow
-        log local0. "mr_ingress ss nexthop  [MR::message nexthop]"
-        log local0. "mr_ingress ss status  [MR::message status]"
-        log local0. "mr_ingress ss connection_instance  [MR::connection_instance]"
-        log local0. "mr_ingress ss transport  [MR::transport]"
-        log local0. "mr_ingress ss message attempted  [MR::message attempted]"
-        log local0. "mr_ingress ss route  [MR::message route]"
-        log local0. "mr_ingress ss remote_addr [IP::remote_addr]"
+        #log local0. "mr_ingress ss nexthop  [MR::message nexthop]"
+        #log local0. "mr_ingress ss status  [MR::message status]"
+        #log local0. "mr_ingress ss connection_instance  [MR::connection_instance]"
+        #log local0. "mr_ingress ss transport  [MR::transport]"
+        #log local0. "mr_ingress ss message attempted  [MR::message attempted]"
+        #log local0. "mr_ingress ss route  [MR::message route]"
+        #log local0. "mr_ingress ss remote_addr [IP::remote_addr]"
     } else {
         log local0.warn "Received RADIUS response from ([IP::remote_addr]:[TCP::remote_port]), but there is no response mapping.  Dropping."
         MR::message drop "Client return flow not defined"
@@ -66,18 +66,18 @@ when MR_INGRESS {
 }
 
 when MR_EGRESS {
-    log local0. "#### Starting MR_EGRESS SERVERSIDE ####"
-    log local0. "Number of connection instance [MR::connection_instance]"
-    log local0. "mr_egress ss nexthop [MR::message nexthop]"
-    log local0. "mr_egress ss status [MR::message status]"
-    log local0. "mr_egress ss route [MR::message route]"
-    log local0. "mr_egress ss connection_instance [MR::connection_instance]"
-    log local0. "mr_egress ss transport [MR::transport]"
-    log local0. "mr_egress ss message attempted [MR::message attempted]"
-    log local0. "mr_egress ss remote_addr  [IP::remote_addr]"
+    #log local0. "#### Starting MR_EGRESS SERVERSIDE ####"
+    #log local0. "Number of connection instance [MR::connection_instance]"
+    #log local0. "mr_egress ss nexthop [MR::message nexthop]"
+    #log local0. "mr_egress ss status [MR::message status]"
+    #log local0. "mr_egress ss route [MR::message route]"
+    #log local0. "mr_egress ss connection_instance [MR::connection_instance]"
+    #log local0. "mr_egress ss transport [MR::transport]"
+    #log local0. "mr_egress ss message attempted [MR::message attempted]"
+    #log local0. "mr_egress ss remote_addr  [IP::remote_addr]"
     MR::restore client_return_flow egress_persistence_key
     if { $egress_persistence_key ne "" } {
-      log local0. "received persistence key in mr egress = $egress_persistence_key"
+      #log local0. "received persistence key in mr egress = $egress_persistence_key"
       table set $egress_persistence_key "[string range [MR::transport] [string first / [MR::transport]] end];[IP::remote_addr]%[ROUTE::domain]:[TCP::remote_port]" $static::radius_rule_persistence_entry_timeout indef
     }
 }
@@ -89,14 +89,14 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED SERVERSIDE ****"
-    log local0. "DEBUG: MR_FAILED"
-    log local0. "mr_failed ss nexthop  [MR::message nexthop]"
-    log local0. "mr_failed ss status  [MR::message status]"
-    log local0. "mr_failed ss connection_instance [MR::connection_instance]"
-    log local0. "mr_failed ss transport  [MR::transport]"
-    log local0. "mr_failed ss message attempted  [MR::message attempted]"
-    log local0. "mr_failed ss route  [MR::message route]"
-    log local0. "mr_failed ss remote_addr  [IP::remote_addr]"
+    #log local0. "DEBUG: MR_FAILED"
+    #log local0. "mr_failed ss nexthop  [MR::message nexthop]"
+    #log local0. "mr_failed ss status  [MR::message status]"
+    #log local0. "mr_failed ss connection_instance [MR::connection_instance]"
+    #log local0. "mr_failed ss transport  [MR::transport]"
+    #log local0. "mr_failed ss message attempted  [MR::message attempted]"
+    #log local0. "mr_failed ss route  [MR::message route]"
+    #log local0. "mr_failed ss remote_addr  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
