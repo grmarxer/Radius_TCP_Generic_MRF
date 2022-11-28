@@ -1,8 +1,9 @@
 #============================================================================================================================#
 # Purpose  : Radius SSL/TCP Generic MRF iRule persisting on AVP Type 44 (Server-Side MRF Transport Config iRule)
 # Author   : Gregg Marxer (g.marxer@f5.com), Vernon Wells (v.wells@f5.com)
-# Date     : April 20, 2022
-# Version  : 0.0.1
+# Revised  : Chris Terry (c.terry@f5.com)
+# Date     : November 28, 2022
+# Version  : 0.0.2
 #
 # Change Log:
 #============================================================================================================================#
@@ -37,13 +38,13 @@ when SERVER_DATA {
             TCP::collect
             return
         }
- 
+
         GENERICMESSAGE::message create [TCP::payload $next_radius_pdu_length]
    
         TCP::release $next_radius_pdu_length
         set next_radius_pdu_length -1
     }
- 
+
     TCP::collect
 }
 
@@ -66,19 +67,19 @@ when MR_INGRESS {
 }
 
 when MR_EGRESS {
-    #log local0. "#### Starting MR_EGRESS SERVERSIDE ####"
-    #log local0. "Number of connection instance [MR::connection_instance]"
-    #log local0. "mr_egress ss nexthop [MR::message nexthop]"
-    #log local0. "mr_egress ss status [MR::message status]"
-    #log local0. "mr_egress ss route [MR::message route]"
-    #log local0. "mr_egress ss connection_instance [MR::connection_instance]"
-    #log local0. "mr_egress ss transport [MR::transport]"
-    #log local0. "mr_egress ss message attempted [MR::message attempted]"
-    #log local0. "mr_egress ss remote_addr  [IP::remote_addr]"
+    log local0. "#### Starting MR_EGRESS SERVERSIDE ####"
+    log local0. "Number of connection instance [MR::connection_instance]"
+    log local0. "mr_egress ss nexthop [MR::message nexthop]"
+    log local0. "mr_egress ss status [MR::message status]"
+    log local0. "mr_egress ss route [MR::message route]"
+    log local0. "mr_egress ss connection_instance [MR::connection_instance]"
+    log local0. "mr_egress ss transport [MR::transport]"
+    log local0. "mr_egress ss message attempted [MR::message attempted]"
+    log local0. "mr_egress ss remote_addr  [IP::remote_addr]"
     MR::restore client_return_flow egress_persistence_key
     if { $egress_persistence_key ne "" } {
-      #log local0. "received persistence key in mr egress = $egress_persistence_key"
-      table set $egress_persistence_key "[string range [MR::transport] [string first / [MR::transport]] end];[IP::remote_addr]%[ROUTE::domain]:[TCP::remote_port]" $static::radius_rule_persistence_entry_timeout indef
+      log local0. "received persistence key in mr egress = $egress_persistence_key"
+      table set $egress_persistence_key "[string range [MR::transport] [string first / [MR::transport]] end];[IP::remote_addr]:[TCP::remote_port]" $static::radius_rule_persistence_entry_timeout indef
     }
 }
 
@@ -89,14 +90,14 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED SERVERSIDE ****"
-    #log local0. "DEBUG: MR_FAILED"
-    #log local0. "mr_failed ss nexthop  [MR::message nexthop]"
-    #log local0. "mr_failed ss status  [MR::message status]"
-    #log local0. "mr_failed ss connection_instance [MR::connection_instance]"
-    #log local0. "mr_failed ss transport  [MR::transport]"
-    #log local0. "mr_failed ss message attempted  [MR::message attempted]"
-    #log local0. "mr_failed ss route  [MR::message route]"
-    #log local0. "mr_failed ss remote_addr  [IP::remote_addr]"
+    log local0. "DEBUG: MR_FAILED"
+    log local0. "mr_failed ss nexthop  [MR::message nexthop]"
+    log local0. "mr_failed ss status  [MR::message status]"
+    log local0. "mr_failed ss connection_instance [MR::connection_instance]"
+    log local0. "mr_failed ss transport  [MR::transport]"
+    log local0. "mr_failed ss message attempted  [MR::message attempted]"
+    log local0. "mr_failed ss route  [MR::message route]"
+    log local0. "mr_failed ss remote_addr  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"

@@ -1,8 +1,9 @@
 #============================================================================================================================#
 # Purpose  : Radius SSL/TCP Generic MRF iRule persisting on AVP Type 44 (Client-Side VIP iRule)
 # Author   : Gregg Marxer (g.marxer@f5.com), Vernon Wells (v.wells@f5.com)
-# Date     : April 20, 2022
-# Version  : 0.0.1
+# Revised  : Chris Terry (c.terry@f5.com)
+# Date     : November 28, 2022
+# Version  : 0.0.2
 #
 # Change Log:
 #============================================================================================================================#
@@ -46,10 +47,10 @@ when CLIENTSSL_DATA {
         SSL::release $next_radius_pdu_length
         set next_radius_pdu_length -1
     }
- 
+
     SSL::collect
 }
- 
+
 when GENERICMESSAGE_INGRESS {
     #log local0. "#### Starting GENERICMESSAGE_INGRESS ####"
     set acct_session_id_for_this_msg ""
@@ -71,7 +72,7 @@ when GENERICMESSAGE_INGRESS {
             #log local0. "acct_session_id_for_this_msg - which is type 44 value = ($acct_session_id_for_this_msg)"
             return
         }
- 
+
         incr starting_point_of_next_avp $avp_length
     }
 }
@@ -105,13 +106,13 @@ when GENERICMESSAGE_EGRESS {
 
 when MR_FAILED {
     log local0. "**** Entering MR_FAILED CLIENTSIDE ****"
-    #log local0. "mr_failed cs nexthop  [MR::message nexthop]"
-    #log local0. "mr_failed cs status  [MR::message status]"
-    #log local0. "mr_failed cs connection_instance [MR::connection_instance]"
-    #log local0. "mr_failed cs transport  [MR::transport]"
-    #log local0. "mr_failed cs message attempted  [MR::message attempted]"
-    #log local0. "mr_failed cs route [MR::message route]"
-    #log local0. "mr_failed cs remote_addr  [IP::remote_addr]"
+    log local0. "mr_failed cs nexthop  [MR::message nexthop]"
+    log local0. "mr_failed cs status  [MR::message status]"
+    log local0. "mr_failed cs connection_instance [MR::connection_instance]"
+    log local0. "mr_failed cs transport  [MR::transport]"
+    log local0. "mr_failed cs message attempted  [MR::message attempted]"
+    log local0. "mr_failed cs route [MR::message route]"
+    log local0. "mr_failed cs remote_addr  [IP::remote_addr]"
     # in general, with mr-generic you need this event or unexpected things will happen when a route failure occurs
     if { [MR::message retry_count] < [MR::max_retries] } {
         log local0. "rc = ([MR::message retry_count]) : MR = ([MR::max_retries])"
