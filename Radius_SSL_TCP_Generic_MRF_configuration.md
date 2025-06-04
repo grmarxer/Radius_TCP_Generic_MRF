@@ -13,9 +13,9 @@
 
 1. Create the following iRule's `Radius_SSL_Generic_MRF_ClientSide_iRule` and `Radius_SSL_Generic_MRF_ServerSide_iRule` on BIG-IP using the GUI -- Local Traffic > iRules > Create  
 
-    - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_SSL_Generic_MRF_ClientSide_iRule.tcl) to create the `Radius_SSL_Generic_MRF_ClientSide_iRule`.  
+    - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_SSL_Generic_MRF_ClientSide_iRule_06042025.tcl) to create the `Radius_SSL_Generic_MRF_ClientSide_iRule`.  
 
-    - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_SSL_Generic_MRF_ServerSide_iRule.tcl) to create the `Radius_SSL_Generic_MRF_ServerSide_iRule`.
+    - Copy the contents of [this file](https://github.com/grmarxer/Radius_TCP_Generic_MRF/blob/main/iRules/Radius_SSL_Generic_MRF_ServerSide_iRule_06042025.tcl) to create the `Radius_SSL_Generic_MRF_ServerSide_iRule`.
 
 2.  Create the Nodes and Pool for the Radius Servers  
     - Adjust the number of nodes according to your specific configuration, the IP addresses and port numbers
@@ -29,7 +29,7 @@
 3. Create the Generic MRF Configuration -- Generic MRF can only be configured in TMSH
     ```
     tmsh create ltm message-routing generic protocol radiusTcp no-response yes disable-parser yes
-    tmsh create ltm message-routing generic transport-config toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp f5-tcp-progressive } source-address-translation { type automap } rules { Radius_SSL_Generic_MRF_ServerSide_iRule }
+    tmsh create ltm message-routing generic transport-config toward-radiusServer-cluster01 profiles replace-all-with { radiusTcp f5-tcp-progressive } source-address-translation { type automap } rules { Radius_SSL_Generic_MRF_ServerSide_iRule_06042025 }
     tmsh create ltm message-routing generic peer peer-radiusServer-cluster01 auto-initialization disabled connection-mode per-client pool radius_tcp_server_pool transport-config toward-radiusServer-cluster01
     tmsh create ltm message-routing generic route route-radiusServer-cluster01 peers { peer-radiusServer-cluster01 }
     tmsh create ltm message-routing generic router router-toward-radiusServer-cluster01 routes replace-all-with { route-radiusServer-cluster01 }
@@ -39,6 +39,6 @@
     - Adjust the Virtual Server IP address and port specific to your configuration
 
     ``` 
-    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { clientssl radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:2083 rules { Radius_SSL_Generic_MRF_ClientSide_iRule }
+    tmsh create ltm virtual vs-radiusTCP-toward-radiusServer-cluster01 profiles replace-all-with { clientssl radiusTcp router-toward-radiusServer-cluster01 f5-tcp-progressive } destination 172.16.5.25:2083 rules { Radius_SSL_Generic_MRF_ClientSide_iRule_06042025 }
     tmsh save sys config
     ```  
