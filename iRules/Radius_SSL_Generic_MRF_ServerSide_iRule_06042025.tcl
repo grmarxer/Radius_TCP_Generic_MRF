@@ -6,7 +6,7 @@
 # Version  : 0.0.3
 #
 # Change Log: This iRule has been updated to correct for an issue where table lookups were being stepped on, resulting in
-# 			  a different pool member being selected for known AVP 44 flows
+#             a different pool member being selected for known AVP 44 flows
 #============================================================================================================================#
 
 
