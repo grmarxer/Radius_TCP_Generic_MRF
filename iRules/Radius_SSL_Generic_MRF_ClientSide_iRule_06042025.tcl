@@ -1,7 +1,7 @@
 #============================================================================================================================#
 # Purpose  : Radius SSL/TCP Generic MRF iRule persisting on AVP Type 44 (Server-Side MRF Transport Config iRule)
 # Author   : Gregg Marxer (g.marxer@f5.com), Vernon Wells (v.wells@f5.com)
-# Revised  : June 4, 2025
+# Revised  : June 9, 2025
 # Date     : November 28, 2022
 # Version  : 0.0.3
 #
@@ -12,29 +12,32 @@
 
 when CLIENT_ACCEPTED {
     GENERICMESSAGE::peer name "[IP::client_addr]:[TCP::client_port]"
-    set next_radius_pdu_length -1
-    TCP::collect
 }
 
-when CLIENT_DATA {
-    while { [TCP::payload length] >= 20 } {
+when CLIENTSSL_HANDSHAKE {
+    set next_radius_pdu_length -1
+    SSL::collect
+}
+
+when CLIENTSSL_DATA {
+    while { [SSL::payload length] >= 20 } {
         if { $next_radius_pdu_length < 0 } {
-            binary scan [TCP::payload] xxS next_radius_pdu_length
+            binary scan [SSL::payload] xxS next_radius_pdu_length
             set next_radius_pdu_length [expr { $next_radius_pdu_length & 0xffff }]
         }
 
-        if { [TCP::payload length] < $next_radius_pdu_length } {
-            TCP::collect
+        if { [SSL::payload length] < $next_radius_pdu_length } {
+            SSL::collect
             return
         }
         
-        GENERICMESSAGE::message create [TCP::payload $next_radius_pdu_length]
+        GENERICMESSAGE::message create [SSL::payload $next_radius_pdu_length]
 
-        TCP::release $next_radius_pdu_length
+        SSL::release $next_radius_pdu_length
         set next_radius_pdu_length -1
     }
 
-    TCP::collect
+    SSL::collect
 }
 
 when MR_INGRESS {
@@ -68,7 +71,7 @@ when MR_INGRESS {
 }
 
 when GENERICMESSAGE_EGRESS {
-    TCP::respond [GENERICMESSAGE::message data]
+    SSL::respond [GENERICMESSAGE::message data]
 }
 
 when MR_FAILED {
